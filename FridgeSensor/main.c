@@ -6,16 +6,16 @@ unsigned int sample[11];
 int temperature;
 int getTemperatureFromSample(int spl);
 
-#define ADCDeltaOn       3                  // ~ 2 Deg C delta for LED on
 
 int main(void)
 {
-  WDTCTL = WDTPW + WDTHOLD;                 // Stop watchdog
+  WDTCTL = WDTPW + WDTHOLD;
   P1OUT = 0;
 
   int c = 0;
-  ADC10CTL1 = ADC10DIV_7 + INCH_10 + SHS_1 + CONSEQ_3;  // TA trig., rpt, A10
+  ADC10CTL1 = ADC10DIV_7 + INCH_10 + SHS_1 + CONSEQ_3;
   ADC10CTL0 = SREF_1 + ADC10SHT_3 + REF2_5V  + REFON + ADC10ON;
+
   //setup DTC
   ADC10DTC0 = ADC10CT;
   ADC10DTC1 = 11;
@@ -24,20 +24,20 @@ int main(void)
   ADC10AE0 = BIT0;
   P1DIR |= BIT6;
 
-  __enable_interrupt();                     // Enable interrupts.
+  __enable_interrupt();
   for(c = 0; c<100; c++){
 
   }
 
   ADC10CTL0 |= ENC;
-  TACCTL1 = OUTMOD_4;                       // Toggle on EQU1 (TAR = 0)
-  TACTL = TASSEL_2 + MC_2;                  // SMCLK, cont-mode
+  TACCTL1 = OUTMOD_4;
 
+  TACTL = TASSEL_2 + MC_2;
 
   //setup sample timer
   TA1CCTL0 |= CCIE;
   TA1CTL = TASSEL_2 | MC_2 | ID_3| TACLR;
-  //__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ interrupt
+  //__bis_SR_register(LPM0_bits + GIE);
   for(;;){};
 }
 
