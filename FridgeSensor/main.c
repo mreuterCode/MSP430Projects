@@ -26,6 +26,7 @@ int main(void)
   TA1CTL = TASSEL_2 | MC_2 | ID_3| TACLR;
 
  __bis_SR_register(LPM0_bits + GIE);        // Enter LPM0 w/ interrupts
+
   for(;;);
 
 }
