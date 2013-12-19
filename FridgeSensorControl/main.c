@@ -155,7 +155,7 @@ int main(void)
 			LightCounter = 20;
 		}
 
-		if((currentTemperatureInside >= 25)||(currentIlluminationInside <= 200)){
+		if((currentTemperatureInside >= 14)||(currentIlluminationInside <= 200)){
 			DoorOpen = 1;
 			LightCounter = 20;
 			//P1OUT |= BIT4;
