@@ -155,9 +155,12 @@ int main(void)
 			LightCounter = 20;
 		}
 
-		if((currentTemperatureInside >= 14)||(currentIlluminationInside <= 200)){
+		if((currentTemperatureInside >= 13)||(currentIlluminationInside <= 200)){
 			DoorOpen = 1;
 			LightCounter = 20;
+			if((currentTemperatureInside >= 13)){
+				writeStringToPos("T_in>=13 ",40);
+			}
 			//P1OUT |= BIT4;
 		} else{
 			if(DoorOpen == 1){
@@ -184,7 +187,7 @@ int main(void)
 			DoorShiftRegister = 0;
 			DoorOpenAlert++;
 
-			if(DoorOpenAlert>5){
+			if(DoorOpenAlert>3){
 				P1OUT |= BIT4;
 				modulationCounter = 1;
 				LightCounter = 20;
@@ -195,7 +198,8 @@ int main(void)
 		if(LightCounter&&DisplayOn){
 			LightCounter--;
 			if(DoorOpen){
-				writeStringToPos("Close Door!",0);
+				writeStringToPos("Door Open!",0);
+
 			} else{
 				writeSensorData(currentTemperatureInside,currentTemperatureOutside);
 			}
@@ -204,7 +208,7 @@ int main(void)
 			P2OUT &= ~BIT0;
 			DisplayOn = 1;
 			if(DoorOpen){
-				writeStringToPos("Close Door!",0);
+				writeStringToPos("Door Open!",0);
 			} else{
 				writeSensorData(currentTemperatureInside,currentTemperatureOutside);
 			}
@@ -222,6 +226,12 @@ int main(void)
 __interrupt void PORT2_ISR(void){
 	P2IE &= ~BIT2;
 	LightCounter = 20;
+
+	DoorOpen = 0;
+	DoorOpenAlert = 0;
+	modulationCounter = 0;
+	DoorShiftRegister = 0;
+	P1OUT &= ~BIT4;
 
 	while(P2IFG != 0){
 		P2IFG = 0;
